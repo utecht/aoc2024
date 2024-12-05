@@ -51,12 +51,12 @@ end
 
 def check_mas_x(x, y)
   total = 0
-  total += 1 if (check_wrapped(x - 1, y - 1, 'M') && check_wrapped(x + 1, y + 1, 'S'))
-  total += 1 if (check_wrapped(x + 1, y + 1, 'M') && check_wrapped(x - 1, y - 1, 'S'))
-  total += 1 if (check_wrapped(x + 1, y - 1, 'M') && check_wrapped(x - 1, y + 1, 'S'))
-  total += 1 if (check_wrapped(x - 1, y + 1, 'M') && check_wrapped(x + 1, y - 1, 'S'))
+  total += 1 if check_wrapped(x - 1, y - 1, 'M') && check_wrapped(x + 1, y + 1, 'S')
+  total += 1 if check_wrapped(x + 1, y + 1, 'M') && check_wrapped(x - 1, y - 1, 'S')
+  total += 1 if check_wrapped(x + 1, y - 1, 'M') && check_wrapped(x - 1, y + 1, 'S')
+  total += 1 if check_wrapped(x - 1, y + 1, 'M') && check_wrapped(x + 1, y - 1, 'S')
   # puts "#{x}/#{y} = #{total}"
-  return total == 2
+  total == 2
 end
 
 mas_x_count = 0
