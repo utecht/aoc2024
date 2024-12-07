@@ -66,32 +66,44 @@ spaces_touched = Set.new
 current_x = starting_x
 current_y = starting_y
 while in_bounds
-  spaces_touched.add("#{current_x},#{current_y}")
+  spaces_touched.add([current_x, current_y])
   current_x, current_y, facing, in_bounds = advance(current_x, current_y, facing, grid)
 end
 
 puts spaces_touched.count
 
-loops_found = 0
-grid.length.times do |y|
-  grid[y].length.times do |x|
-    new_grid = grid.map(&:clone)
-    path = Set.new
-    next if x == starting_x && y == starting_y
-
-    new_grid[y][x] = '#'
-    current_x = starting_x
-    current_y = starting_y
-    facing = :up
-    not_looping = true
-    in_bounds = true
-    while in_bounds && not_looping
-      not_looping = false if path.include?("#{current_x},#{current_y},#{facing}")
-      path.add("#{current_x},#{current_y},#{facing}")
-      current_x, current_y, facing, in_bounds = advance(current_x, current_y, facing, new_grid)
-    end
-    loops_found += 1 unless not_looping
+def token(x, y, facing)
+  t = x
+  t += y * 1000
+  case facing
+  when :up
+    t += 100_000_000
+  when :right
+    t += 200_000_000
+  when :down
+    t += 300_000_000
+  when :left
+    t += 400_000_000
   end
+  t
+end
+
+loops_found = 0
+spaces_touched.each do |x, y|
+  path = Set.new
+  grid[y][x] = '#'
+  current_x = starting_x
+  current_y = starting_y
+  facing = :up
+  not_looping = true
+  in_bounds = true
+  while in_bounds && not_looping
+    not_looping = false if path.include?(token(current_x, current_y, facing))
+    path.add(token(current_x, current_y, facing))
+    current_x, current_y, facing, in_bounds = advance(current_x, current_y, facing, grid)
+  end
+  loops_found += 1 unless not_looping
+  grid[y][x] = '.'
 end
 
 puts loops_found
